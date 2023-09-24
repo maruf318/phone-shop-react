@@ -5,6 +5,7 @@ import FavoritesCard from "./FavoritesCard";
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [noFound, setNoFound] = useState(false);
+  const [isShow, setEachShow] = useState(false);
   // const favoriteItem = JSON.parse(localStorage.getItem("favorites"));
   useEffect(() => {
     const favoriteItem = JSON.parse(localStorage.getItem("favorites"));
@@ -20,6 +21,7 @@ const Favorites = () => {
     setFavorites([]);
     setNoFound("No data found");
   };
+  console.log(isShow);
 
   return (
     <div>
@@ -36,12 +38,23 @@ const Favorites = () => {
             </button>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-            {favorites.map((phone) => (
-              <FavoritesCard key={phone.id} phone={phone}></FavoritesCard>
-            ))}
+            {isShow
+              ? favorites.map((phone) => (
+                  <FavoritesCard key={phone.id} phone={phone}></FavoritesCard>
+                ))
+              : favorites
+                  .slice(0, 2)
+                  .map((phone) => (
+                    <FavoritesCard key={phone.id} phone={phone}></FavoritesCard>
+                  ))}
           </div>
-          {favorites.length > 4 && (
-            <button className="p-4 bg-green-200 block mx-auto">See All</button>
+          {favorites.length > 2 && (
+            <button
+              onClick={() => setEachShow(!isShow)}
+              className="p-4 bg-green-200 block mx-auto"
+            >
+              {isShow ? "Show Less" : "Show More"}
+            </button>
           )}
         </div>
       )}
